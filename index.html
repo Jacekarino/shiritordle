@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <title>Shiritordle</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="chat-header">
+      <div class="bot-info">
+        <div class="avatar-container">
+          <div class="avatar">🤖</div>
+          <div class="online-dot"></div>
+        </div>
+        <div class="bot-details">
+          <h2>Shiritordle</h2>
+          <p>Online</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="score-pill">
+          <span class="score-label">Score</span>
+          <span class="score-value" id="current-score">0</span>
+        </div>
+        <button id="menu-btn" class="menu-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Chat Body -->
+    <main class="chat-body" id="chat-body">
+      <!-- Inject messages -->
+      <div class="message system-message">
+        <p>Game started!
+          Respond with a word starting with the last letter of the previous word.
+          You have 10 seconds. Good luck!
+        </p>
+      </div>
+    </main>
+
+    <!-- Game Over Overlay -->
+    <div class="game-over-overlay" id="game-over-screen" style="display: none;">
+      <div class="game-over-card">
+        <h2>Game Over</h2>
+        <p id="game-over-reason">You ran out of time.</p>
+        <div class="final-score">
+          <span>Score: </span><span id="final-score-value">0</span>
+        </div>
+        <div class="high-score-container">
+          <span>Best: </span><span id="high-score-value">0</span>
+        </div>
+        <div class="game-over-buttons">
+          <button id="btn-play-again" class="btn primary">Play Again</button>
+          <button id="btn-share" class="btn secondary">Share Score</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div class="menu-overlay game-over-overlay" id="menu-screen" style="display: none;">
+      <div class="menu-card game-over-card" style="max-height: 90vh; overflow-y: auto;">
+
+        <!-- Main Menu -->
+        <div id="menu-main">
+          <h2>Menu</h2>
+          <div class="menu-buttons" style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+            <button class="btn secondary menu-nav-btn" data-target="menu-how-to">How To Play</button>
+            <button class="btn secondary menu-nav-btn" data-target="menu-stats">Stats And Scores</button>
+            <button class="btn secondary menu-nav-btn" data-target="menu-about">About The Game</button>
+            <button class="btn primary" id="close-menu-play-btn" style="margin-top: 12px;">Play Shiritordle</button>
+          </div>
+        </div>
+
+        <!-- How To Play Panel -->
+        <div id="menu-how-to" class="menu-panel" style="display: none;">
+          <h2 style="margin-top: 12px;">How To Play</h2>
+          <div class="rules-box">
+            <p>🔥 Respond with a valid English word starting with the <strong>last letter</strong> of the previous word!
+            </p>
+            <p>⏳ You have <strong>10 seconds</strong> to respond. Be fast!</p>
+            <p>🚫 No repeating words.</p>
+            <p>🔤 Single letters are not allowed.</p>
+          </div>
+          <button class="btn secondary menu-back-btn" style="width: 100%; margin-top: 16px;">Back to Menu</button>
+        </div>
+
+        <!-- Stats Panel -->
+        <div id="menu-stats" class="menu-panel" style="display: none;">
+          <h2 style="margin-top: 12px;">Stats And Scores</h2>
+          <div class="stats-grid">
+            <div class="stat-item"><span>Times Played:</span> <strong id="stat-games">0</strong></div>
+            <div class="stat-item"><span>Best Score:</span> <strong id="stat-best">0</strong></div>
+            <div class="stat-item"><span>Longest Word:</span> <strong id="stat-longest">-</strong></div>
+            <div class="stat-item"><span>Favourite First Letter:</span> <strong id="stat-first-letter">-</strong></div>
+            <div class="stat-item"><span>Favourite Last Letter:</span> <strong id="stat-last-letter">-</strong></div>
+          </div>
+          <button class="btn secondary menu-back-btn" style="width: 100%; margin-top: 16px;">Back to Menu</button>
+        </div>
+
+        <!-- About Panel -->
+        <div id="menu-about" class="menu-panel about-section" style="display: none;">
+          <h2 style="margin-top: 12px;">About The Game</h2>
+          <div class="rules-box" style="text-align: center;">
+            <p style="margin-bottom: 8px;"><strong>Made with ♡ by Jacekarino</strong></p>
+            <p style="font-size: 13px; line-height: 1.5; color: #8e8e93; margin-bottom: 16px;">This is an open-source
+              prototype / proof of concept. The game is functional, but may have issues. Done in a day for fun and as a
+              learning experience and a portfolio piece. Shiritordle uses DictionaryAPI.dev for fetching words and
+              checking if they exist.</p>
+            <a href="https://github.com/Jacekarino" target="_blank" class="btn primary github-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path
+                  d="M12 0C5.37 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.6.113.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23a11.5 11.5 0 013.003-.404c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
+              </svg>
+              GitHub
+            </a>
+          </div>
+          <button class="btn secondary menu-back-btn" style="width: 100%; margin-top: 16px;">Back to Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Dock -->
+    <footer class="input-dock">
+      <div class="progress-bar-container">
+        <div class="progress-line" id="progress-line"></div>
+      </div>
+      <form class="input-form" id="input-form">
+        <input type="text" id="word-input" placeholder="Message iMessage..." autocomplete="off" autocorrect="off"
+          spellcheck="false" disabled>
+        <button type="submit" id="send-btn" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="send-icon">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+          <div class="spinner" id="loading-spinner" style="display: none;"></div>
+        </button>
+      </form>
+    </footer>
+
+  </div>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
